@@ -96,7 +96,8 @@ const Hero = () => {
                     className="hidden dark:block"
                     src="/images/hero/hero.svg"
                     alt="Hero"
-                    fill
+                    width={2000}
+                    height={2000}
                   />
                 </div>
               </div>
