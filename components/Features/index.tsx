@@ -26,6 +26,7 @@ const Feature = () => {
             {featuresData.map((feature, key) => (
               <SingleFeature feature={feature} key={key} />
             ))}
+            
             {/* <!-- Features item End --> */}
           </div>
         </div>

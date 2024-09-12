@@ -1,111 +1,79 @@
 "use client";
-import Image from "next/image";
-import { useState } from "react";
+import { useEffect } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const Hero = () => {
-  const [email, setEmail] = useState("");
+  useEffect(() => {
+    // GSAP ScrollTrigger effect for pinning and scaling
+    let tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: '#hero-anim-track',
+        pin: true,
+        start: '50% 50%',
+        end: '+=200px',
+        scrub: 1,
+        snap: {
+          snapTo: 'labels',
+          duration: { min: 0.1, max: 0.5 },
+          delay: 0,
+          ease: 'linear',
+        },
+      },
+    });
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-  };
+    tl.to('#hero-anim-track', {
+      scale: 0.9,
+      borderRadius: "2em",
+      duration: 1.5,
+    })
+      .to('#hero-anim-track svg', {
+        rotate: 180,
+        duration: 0.2,
+      })
+      .to('#hero-anim-track', {
+        boxShadow: '0 0px 0px rgba(0,0,0,0.30), 0 0px 0px rgba(0,0,0,0.22)',
+        duration: 2,
+        ease: 'linear',
+      });
+
+    // Text changing animation
+    let textTl = gsap.timeline({ repeat: -1, repeatDelay: 1 });
+    textTl.to('#changing-text', { opacity: 0, duration: 0.5 })
+      .set('#changing-text', { textContent: 'Studio' })
+      .to('#changing-text', { opacity: 1, duration: 0.5 })
+      .to('#changing-text', { opacity: 0, duration: 0.5, delay: 1 })
+      .set('#changing-text', { textContent: 'Shooting Space' })
+      .to('#changing-text', { opacity: 1, duration: 0.5 })
+      .to('#changing-text', { opacity: 0, duration: 0.5, delay: 1 })
+      .set('#changing-text', { textContent: 'Location' })
+      .to('#changing-text', { opacity: 1, duration: 0.5 });
+
+  }, []);
 
   return (
-    <>
-      <section className="overflow-hidden pb-20 pt-35 md:pt-40 xl:pb-25 xl:pt-46">
-        <div className="mx-auto max-w-c-1390 px-4 md:px-8 2xl:px-0">
-          <div className="flex lg:items-center lg:gap-8 xl:gap-32.5">
-            <div className=" md:w-1/2">
-              <h4 className="mb-4.5 text-lg font-medium text-black dark:text-white">
-                We Empower Your Content Vision 🔥
-              </h4>
-              <h1 className="mb-5 pr-16 text-3xl font-bold text-black dark:text-white xl:text-hero ">
-                Stop Dreaming, Start Creating {"   "}
-                <span className="relative inline-block before:absolute before:bottom-2.5 before:left-0 before:-z-1 before:h-3 before:w-full before:bg-titlebg dark:before:bg-titlebgdark ">
-                  Professional Content
-                </span>
-              </h1>
-              <p>
-                Do you have a story begging to be told? A vision waiting to be realized? At ContCave, we believe everyone has the power to create impactful content. We're more than just a platform – we're your launchpad for creative success.
-              </p>
-
-              <div className="mt-10">
-                <form onSubmit={handleSubmit}>
-                  <div className="flex flex-wrap gap-5">
-                    <input
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      type="text"
-                      placeholder="Enter your email address"
-                      className="rounded-full border border-stroke px-6 py-2.5 shadow-solid-2 focus:border-primary focus:outline-none dark:border-strokedark dark:bg-black dark:shadow-none dark:focus:border-primary"
-                    />
-                    <button
-                      aria-label="get started button"
-                      className="flex rounded-full bg-black px-7.5 py-2.5 text-white duration-300 ease-in-out hover:bg-blackho dark:bg-btndark dark:hover:bg-blackho"
-                    >
-                      Get Started
-                    </button>
-                  </div>
-                </form>
-
-                <p className="mt-5 text-black dark:text-white">
-                  First 100 bookings, special discount on us
-                </p>
-              </div>
-            </div>
-
-            <div className="animate_right hidden md:w-1/2 lg:block">
-              <div className="relative 2xl:-mr-7.5">
-                <Image
-                  src="/images/shape/shape-02.svg"
-                  alt="shape"
-                  width={46}
-                  height={246}
-                  className="absolute -left-16.5 top-0"
-                />
-                <Image
-                  src="/images/shape/shape-03.svg"
-                  alt="shape"
-                  width={21.64}
-                  height={21.66}
-                  className="absolute -left-7 top-8"
-                />
-                <Image
-                  src="/images/shape/shape-02.svg"
-                  alt="shape"
-                  width={36.9}
-                  height={36.7}
-                  className="absolute bottom-0 right-0 z-10"
-                />
-                <Image
-                  src="/images/shape/shape-03.svg"
-                  alt="shape"
-                  width={21.64}
-                  height={21.66}
-                  className="absolute -right-6.5 bottom-0 z-1"
-                />
-                <div className=" relative aspect-[700/444] w-full">
-                  <Image
-                    className="dark:hidden"
-                    src="/images/hero/hero.svg"
-                    alt="Hero"
-                    width={2000}
-                    height={2000}
-
-                  />
-                  <Image
-                    className="hidden dark:block"
-                    src="/images/hero/hero.svg"
-                    alt="Hero"
-                    width={2000}
-                    height={2000}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
+    <div id="hero-anim-track" className="overflow-hidden shadow-lg">
+      <div className="hero flex items-end min-h-screen bg-gradient-to-r from-purple-600 to-blue-500 text-white relative">
+        <div className="txt w-full px-4 py-8 m-10 flex flex-col">
+          <h1 className="text-4xl font-bold">
+            Find the perfect <span id="changing-text">Studio</span>
+          </h1>
+          <p className="text-lg opacity-70 mt-4">
+            Do you have a story begging to be told?
+          </p>
+          <svg viewBox="0 0 320 512" width="100" className="mx-auto mt-6 opacity-25">
+            <path d="M143 352.3L7 216.3c-9.4-9.4-9.4-24.6 0-33.9l22.6-22.6c9.4-9.4 24.6-9.4 33.9 0l96.4 96.4 96.4-96.4c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9l-136 136c-9.2 9.4-24.4 9.4-33.8 0z" />
+          </svg>
         </div>
-      </section>
-    </>
+        <img
+          src="https://images.unsplash.com/photo-1471341971476-ae15ff5dd4ea?q=80&w=3132&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          alt="Hero background"
+          className="absolute left-0 top-0 w-full h-full object-cover opacity-20"
+        />
+      </div>
+    </div>
   );
 };
 
