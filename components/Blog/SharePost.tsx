@@ -1,4 +1,6 @@
-const SharePost = () => {
+import { Blog } from "@/types/blog";
+
+const SharePost = ({ tags }: Partial<Blog>) => {
   return (
     <>
       <div className="mt-11 flex flex-wrap gap-4 md:items-center md:justify-between md:gap-0">
@@ -105,16 +107,14 @@ const SharePost = () => {
             <p className="text-black dark:text-white">Tags:</p>
           </li>
           <li>
-            <a
-              href="#"
-              className="pr-2 duration-300 ease-in-out hover:text-primary"
-            >
-              #business
-            </a>
-
-            <a href="#" className="duration-300 ease-in-out hover:text-primary">
-              #saas
-            </a>
+            {tags && tags.map((tag, index) => (
+              <a
+                href="#"
+                className="mr-2 duration-300 ease-in-out hover:text-black rounded-full py-1 px-3 bg-gray-200" key={index}
+              >
+                {tag}
+              </a>
+            ))}
           </li>
         </ul>
       </div>
